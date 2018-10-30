@@ -1,28 +1,36 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
-import { ListItemComponent } from './list-item/list-item.component';
-import { NavComponent } from './nav/nav.component';
 import { AppRoutingModule } from './app-routing.module';
-import { ListItem2Component } from './list-item2/list-item2.component';
-import { ListItem3Component } from './list-item3/list-item3.component';
+import { AppComponent } from './app.component';
+import { UserComponent } from './user/user.component';
+
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+
+import { APIInterceptor, InterceptorServiceService } from './interceptor-service.service'
 
 @NgModule({
   declarations: [
     AppComponent,
-    ListItemComponent,
-    NavComponent,
-    ListItem2Component,
-    ListItem3Component
+    UserComponent
   ],
   imports: [
     BrowserModule,
-    HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: APIInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: InterceptorServiceService,
+      multi: true,
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
